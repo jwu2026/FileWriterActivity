@@ -46,4 +46,11 @@ public class MyFileWriter {
             e.printStackTrace();
         }
     }
+
+    // Calculate and print the file size using the File class
+    private static void printFileSize(String fileName) {
+
+        System.out.println("File " + fileName + " does not exist.");
+
+    }
 }
