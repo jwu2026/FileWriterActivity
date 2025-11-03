@@ -53,4 +53,14 @@ public class MyFileWriter {
         System.out.println("File " + fileName + " does not exist.");
 
     }
+
+    public static String stringify(String filePath) throws IOException {
+        String str = "", lString;
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            while ((lString = reader.readLine()) != null) {
+                str += lString + "\n";
+            }
+        }
+        return str;
+    }
 }
