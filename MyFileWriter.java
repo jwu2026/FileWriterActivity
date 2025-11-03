@@ -47,6 +47,16 @@ public class MyFileWriter {
         }
     }
 
+    public static String stringify(String filePath) throws IOException {
+        String str = "", lString;
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            while ((lString = reader.readLine()) != null) {
+                str += lString + "\n";
+            }
+        }
+        return str;
+    }
+
     // Calculate and print the file size using the File class
     private static void printFileSize(String fileName) {
 
