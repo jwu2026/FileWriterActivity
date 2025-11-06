@@ -47,6 +47,16 @@ public class MyFileWriter {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        try {
+            testHashFileEmptyFiles();
+            testHashFileLargeFiles();
+            testHashFileSpecialChars();
+            testHashFileNonExistent();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public static String hashFile(String filePath) {
@@ -78,11 +88,43 @@ public class MyFileWriter {
 
     }
 
-    // Calculate and print the file size using the File class
+    // Prints output that matches the SHA-256 hash of an empty file
+    public static void testHashFileEmptyFiles() throws IOException {
+        Path empty = Files.createTempFile("empty", ".txt");
+        System.out.println(MyFileWriter.hashFile(empty.toString()));
+    }
+
+    // Able to hash large files and prints the correct hash string
+    public static void testHashFileLargeFiles() throws IOException {
+        Path large = Files.createTempFile("large", ".txt");
+        String str = "";
+        for (int i = 0; i < 10000; i++) {
+            str += "100";
+        }
+        Files.writeString(large, str);
+        System.out.println(MyFileWriter.hashFile(large.toString()));
+    }
+
+    // Able to hash files with emojis and characters in another language, prints the
+    // correct hash string
+    public static void testHashFileSpecialChars() throws IOException {
+        Path special = Files.createTempFile("special", ".txt");
+        Files.writeString(special, "我喜欢虫🪱🪱");
+        System.out.println(MyFileWriter.hashFile(special.toString()));
+    }
+
+    // Prints the hash of a nonexistent file and throws FileNotFoundException
+    public static void testHashFileNonExistent() throws IOException {
+        System.out.println("File doesn't exist: " + MyFileWriter.hashFile("nonexistent.txt"));
+    }
+
     private static void printFileSize(String fileName) {
-
-        System.out.println("File " + fileName + " does not exist.");
-
+        File file = new File(fileName);
+        if (file.exists()) {
+            System.out.println("File size of " + fileName + " is " + file.length() + " bytes");
+        } else {
+            System.out.println("File " + fileName + " does not exist.");
+        }
     }
 
 }
