@@ -1,6 +1,8 @@
 import java.io.*;
 import java.nio.file.*;
+import java.security.MessageDigest;
 import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
 
 public class MyFileWriter {
     public static void main(String[] args) {
@@ -47,10 +49,40 @@ public class MyFileWriter {
         }
     }
 
+    public static String hashFile(String filePath) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
+            String str = "", line = bufferedReader.readLine();
+            while (line != null) {
+                str += line;
+                line = bufferedReader.readLine();
+            }
+
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hashBytes = digest.digest(str.getBytes());
+            String hStr = "";
+            for (byte b : hashBytes) {
+                hStr += String.format("%02x", b);
+            }
+
+            return hStr;
+
+        } catch (FileNotFoundException e) {
+            System.err.println("File is not found");
+        } catch (IOException e) {
+            System.err.println("Error in file reading");
+        } catch (NoSuchAlgorithmException e) {
+            System.err.println("Algorithm is not found");
+        }
+
+        return null;
+
+    }
+
     // Calculate and print the file size using the File class
     private static void printFileSize(String fileName) {
 
         System.out.println("File " + fileName + " does not exist.");
 
     }
+
 }
